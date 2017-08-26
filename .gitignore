@@ -1,0 +1,17 @@
+
+
+
+/ipch
+*.pdb
+*.ipch
+*.sdf
+*.obj
+*.tlog
+*.pch
+*.log
+*.user
+*.suo
+*.ilk
+
+
+
