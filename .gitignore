@@ -3,6 +3,7 @@
 
 /ipch
 *.pdb
+*.idb
 *.ipch
 *.sdf
 *.obj
@@ -12,6 +13,4 @@
 *.user
 *.suo
 *.ilk
-
-
-
+*.opensdf
