@@ -5,30 +5,34 @@
 using namespace std;
 using namespace Eigen;
 
+typedef unsigned char Pixel;
+
 int main(int argc, char* argv[])
-{	
+{
+	//seed random
+	srand((unsigned int)time(0));
 
-    //// Load MNIST data
-    //mnist::MNIST_dataset<std::vector, std::vector<uint8_t>, uint8_t> dataset = mnist::read_dataset<std::vector, std::vector, uint8_t, uint8_t>(MNIST_DATA_LOCATION);
 
+	//load mnist data
 	mnist::filePath = File::getContentDir() + "mnist/";
-	auto dataset = mnist::read_dataset();
+	mnist::MNIST_dataset<Pixel, Pixel> trainingDataBase = mnist::read_dataset();
 
-    std::cout << "Nbr of training images = " << dataset.training_images.size() << std::endl;
-    std::cout << "Nbr of training labels = " << dataset.training_labels.size() << std::endl;
-    std::cout << "Nbr of test images = " << dataset.test_images.size() << std::endl;
-    std::cout << "Nbr of test labels = " << dataset.test_labels.size() << std::endl;
+	auto b = Eigen::Matrix<Pixel, Constants::imageSize, 1>(trainingDataBase.test_images[0].data());
+
+	std::cout << "Nbr of training images = " << trainingDataBase.training_images.size() << std::endl;
+	std::cout << "Nbr of training labels = " << trainingDataBase.training_labels.size() << std::endl;
+	std::cout << "Nbr of test images = " << trainingDataBase.test_images.size() << std::endl;
+	std::cout << "Nbr of test labels = " << trainingDataBase.test_labels.size() << std::endl;
+
+	//auto t = Map< Matrix<float, Constants::imageSize, 1> >(trainingDataBase.test_images[0].data(), Constants::imageSize);
 
 
-
-
-	VectorXf greyImage(Constants::imageSize());
+	VectorXf greyImage(Constants::imageSize);
 
 	File::loadPngAsGrayscale("test.png", &greyImage);
 
-	srand((unsigned int)time(0));
 
-	MatrixXf m = MatrixXf::Random(Constants::imageSize(), Constants::imageSize());
+	MatrixXf m = MatrixXf::Random(Constants::imageSize, Constants::imageSize);
 
 	cout << endl << m;
 	cout << endl;

@@ -18,6 +18,6 @@ void File::loadPngAsGrayscale(std::string filename, Eigen::VectorXf* greyImage)
 	//convert to greyscale
 	for(unsigned int i = 0; i < rgbaImage.size(); i += 4)
 	{
-		(*greyImage)[i / 4] = (rgbaImage[i] + rgbaImage[i + 1] + rgbaImage[i + 2]) / 3;
+		(*greyImage)[i / 4] = static_cast<float>((rgbaImage[i] + rgbaImage[i + 1] + rgbaImage[i + 2]) / 3);
 	}
 }

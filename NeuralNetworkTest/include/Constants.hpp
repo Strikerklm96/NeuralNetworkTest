@@ -3,6 +3,6 @@
 class Constants
 {
 public:
-	static int imageSize();
+	const static int imageSize = 28 * 28;
 
 };
