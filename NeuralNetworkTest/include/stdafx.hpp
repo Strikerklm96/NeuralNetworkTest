@@ -16,14 +16,14 @@
 /// </summary>
 #include "Eigen/Eigen"
 
+
 /// <summary>
 /// 
 /// </summary>
-#include "FileIO.hpp"
-#include "Constants.hpp"
-
-
-
+#include "mnist/mnist_reader_less.hpp"
 
 template<typename T>
-using sptr = std::shared_ptr<T>;
+using sptr = std::shared_ptr < T >;
+
+typedef unsigned char Pixel;
+

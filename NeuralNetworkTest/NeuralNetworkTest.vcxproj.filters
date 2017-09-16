@@ -24,10 +24,10 @@
     <ClCompile Include="src\LodePng.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\FileIO.cpp">
+    <ClCompile Include="src\Constants.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\Constants.cpp">
+    <ClCompile Include="src\Data.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -39,9 +39,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\stdafx.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="include\FileIO.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\Constants.hpp">
@@ -57,6 +54,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\mnist\mnist_utils.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Data.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -26,7 +26,7 @@
 
 namespace mnist {
 
-	std::string filePath;
+	extern std::string filePath;
 /*!
  * \brief Represents a complete mnist dataset
  * \tparam Pixel The type of a pixel

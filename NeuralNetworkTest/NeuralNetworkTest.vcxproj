@@ -11,15 +11,15 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Data.cpp" />
     <ClCompile Include="src\Constants.cpp" />
-    <ClCompile Include="src\FileIO.cpp" />
     <ClCompile Include="src\LodePng.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Network.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Data.hpp" />
     <ClInclude Include="include\Constants.hpp" />
-    <ClInclude Include="include\FileIO.hpp" />
     <ClInclude Include="include\LodePng.hpp" />
     <ClInclude Include="include\mnist\mnist_reader.hpp" />
     <ClInclude Include="include\mnist\mnist_reader_common.hpp" />
