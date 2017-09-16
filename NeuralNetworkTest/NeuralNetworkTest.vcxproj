@@ -11,12 +11,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Constants.cpp" />
+    <ClCompile Include="src\FileIO.cpp" />
+    <ClCompile Include="src\LodePng.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\Network.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\Constants.hpp" />
+    <ClInclude Include="include\FileIO.hpp" />
+    <ClInclude Include="include\LodePng.hpp" />
     <ClInclude Include="include\Network.hpp" />
-    <ClInclude Include="include\stdafx.h" />
+    <ClInclude Include="include\stdafx.hpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{0D7E6615-A3B4-4063-9684-3A56D7F72AFF}</ProjectGuid>
@@ -61,7 +67,7 @@
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile />
       <PrecompiledHeaderOutputFile />
-      <AdditionalIncludeDirectories>C:\Users\leon\Desktop\projects\NeuralNetworkTest\NeuralNetworkTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -78,7 +84,7 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <PrecompiledHeaderFile />
       <PrecompiledHeaderOutputFile />
-      <AdditionalIncludeDirectories>C:\Users\leon\Desktop\projects\NeuralNetworkTest\NeuralNetworkTest\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
