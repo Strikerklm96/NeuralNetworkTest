@@ -47,5 +47,17 @@
     <ClInclude Include="include\Constants.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\mnist\mnist_reader.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\mnist\mnist_reader_common.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\mnist\mnist_reader_less.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\mnist\mnist_utils.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
