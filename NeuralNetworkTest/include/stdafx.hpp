@@ -25,5 +25,5 @@
 template<typename T>
 using sptr = std::shared_ptr < T >;
 
-typedef unsigned char Pixel;
+typedef float Pixel;
 

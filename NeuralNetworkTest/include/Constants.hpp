@@ -11,5 +11,4 @@ public:
 };
 
 
-typedef Eigen::Matrix < unsigned char, Constants::imageSize, 1 > ImageVector;
-
+typedef Eigen::Matrix < float, Constants::imageSize, 1 > ImageVector;

@@ -26,18 +26,18 @@
 
 namespace mnist {
 
-	extern std::string filePath;
+	extern const std::string filePath;
 /*!
  * \brief Represents a complete mnist dataset
  * \tparam Pixel The type of a pixel
  * \tparam Label The type of a label
  */
-template <typename Pixel = uint8_t, typename Label = uint8_t>
+template <typename T = uint8_t, typename U = uint8_t>
 struct MNIST_dataset {
-    std::vector<std::vector<Pixel>> training_images; ///< The training images
-    std::vector<std::vector<Pixel>> test_images;     ///< The test images
-    std::vector<Label> training_labels;              ///< The training labels
-    std::vector<Label> test_labels;                  ///< The test labels
+    std::vector<std::vector<T>> training_images; ///< The training images
+    std::vector<std::vector<T>> test_images;     ///< The test images
+    std::vector<U> training_labels;              ///< The training labels
+    std::vector<U> test_labels;                  ///< The test labels
 };
 
 /*!

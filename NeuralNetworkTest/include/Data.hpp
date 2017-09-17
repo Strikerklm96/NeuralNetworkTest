@@ -6,14 +6,10 @@
 class Data
 {
 public:
-	Data();
-	~Data();
-
-
 	/// <summary>
 	/// Returns relative path to the content directory.
 	/// </summary>
-	static std::string getContentDir();
+	static const std::string& getContentDir();
 	/// <summary>
 	/// Starts from content directory. Expects file without extension, Eigen vector appropriately sized.
 	/// </summary>
@@ -29,8 +25,9 @@ public:
 
 	void getTestImage(int index, ImageVector* greyImage, int* solution);
 
+	mnist::MNIST_dataset<unsigned char, unsigned char> dataBase;
 private:
-	mnist::MNIST_dataset<Pixel, Pixel> dataBase;
 
+	void getStuff(int index, ImageVector* greyImage, const std::vector<unsigned char>& image);
 };
 
