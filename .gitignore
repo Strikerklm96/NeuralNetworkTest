@@ -3,6 +3,7 @@
 
 /ipch
 *.pdb
+*.exe
 *.idb
 *.ipch
 *.sdf
