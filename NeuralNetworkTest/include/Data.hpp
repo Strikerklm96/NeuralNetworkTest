@@ -13,7 +13,7 @@ public:
 	/// <summary>
 	/// Starts from content directory. Expects file without extension, Eigen vector appropriately sized.
 	/// </summary>
-	static void loadImage(std::string filename, ImageVector* greyImage, int* solution);
+	static void loadImage(std::string filename, Eigen::VectorXf* greyImage, int* solution);
 
 
 	/// <summary>
@@ -21,13 +21,13 @@ public:
 	/// </summary>
 	bool loadData();
 
-	void getTrainImage(int index, ImageVector* greyImage, int* solution);
+	void getTrainImage(int index, Eigen::VectorXf* greyImage, int* solution);
 
-	void getTestImage(int index, ImageVector* greyImage, int* solution);
+	void getTestImage(int index, Eigen::VectorXf* greyImage, int* solution);
 
 	mnist::MNIST_dataset<unsigned char, unsigned char> dataBase;
 private:
 
-	void getStuff(int index, ImageVector* greyImage, const std::vector<unsigned char>& image);
+	void getStuff(int index, Eigen::VectorXf* greyImage, const std::vector<unsigned char>& image);
 };
 

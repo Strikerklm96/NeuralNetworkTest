@@ -14,12 +14,11 @@ float sigmoid(float z)
 	return(1.f / (1.0f + std::powf(e, -z)));
 }
 
-
-int main(int argc, char* argv[])
+void init(std::vector<VectorXf>& biases, std::vector<MatrixXf >& weights)
 {
-	const int inputLayerSize = 2;// Constants::imageSize;
-	const int hiddenLayerSize = 5;// 30;
-	const int numOutputs = 1;// 10;
+	const int inputLayerSize = Constants::imageSize;
+	const int hiddenLayerSize = 30;
+	const int numOutputs = 10;
 
 	std::vector<int> sizes;
 	sizes.push_back(inputLayerSize);
@@ -27,8 +26,6 @@ int main(int argc, char* argv[])
 	sizes.push_back(numOutputs);
 
 	int numLayers = sizes.size();
-
-	std::vector<VectorXf> biases;//biases modify output value for all connections
 
 	int start = 1;//first layer is input layer, so it doesnt modify its output (the output is the value of the pixels)
 	for(int i = start; i < numLayers; ++i)//for each neuron in the network
@@ -38,28 +35,46 @@ int main(int argc, char* argv[])
 		biases.push_back(biasLayer);
 	}
 
-	std::vector<std::vector<VectorXf> > weights;//weights modify value for each connection
 	weights.resize(numLayers - 1);
 	for(int layer = 0; layer < numLayers - 1; layer++)//for each layer
 	{
 		auto layerSize = sizes[layer];
 		auto& nextLayerSize = sizes[layer + 1];
 
-		for(int neuron = 0; neuron < nextLayerSize; neuron++)//get a neuron in the next layer
-		{
-			auto currentLayerWeights = VectorXf(layerSize);//give it a weight for each neuron in this layer
-			currentLayerWeights.setRandom();
-			weights[layer].push_back(currentLayerWeights);
-		}
+		//a = (3,2)
+		//b = (2)
+		//c = a * b
+		weights[layer] = MatrixXf(nextLayerSize, layerSize);
+		weights[layer].setRandom();
 	}
+}
 
-	float t = biases[0][0];
+void feedForward(VectorXf* inputLayerValues, const std::vector<VectorXf>& biases, const std::vector<MatrixXf >& weights)
+{
+	for(unsigned int i = 0; i < biases.size(); ++i)
+	{
+		auto bias = biases[i];
+		auto weight = weights[i];
 
-	ImageVector greyImage;
+		(*inputLayerValues) = weight * (*inputLayerValues) + bias;//still need to add biases, and add sigmoid
+	}
+}
+
+
+int main(int argc, char* argv[])
+{
+
+
+	std::vector<VectorXf> biases;//biases modify output value for all connections
+	std::vector<MatrixXf > weights;//weights modify value for each connection
+
+	init(biases, weights);
+
+	VectorXf greyImage = Constants::ImageVector();
 
 	int sln;
 	Data::loadImage("test", &greyImage, &sln);
-	
+
 	srand((unsigned int)time(0));
 
 	Data data;
@@ -68,32 +83,12 @@ int main(int argc, char* argv[])
 
 	data.getTrainImage(45, &greyImage, &sln);
 
-	//seed random
+	feedForward(&greyImage, biases, weights);
 
 
-	//for(int i = 0; i<
-	//std::vector<
-
-	//load mnist data
-
-	//auto b = ImageVector();
-
-	//std::cout << "Nbr of training images = " << trainingDataBase.training_images.size() << std::endl;
-	//std::cout << "Nbr of training labels = " << trainingDataBase.training_labels.size() << std::endl;
-	//std::cout << "Nbr of test images = " << trainingDataBase.test_images.size() << std::endl;
-	//std::cout << "Nbr of test labels = " << trainingDataBase.test_labels.size() << std::endl;
-/*
-	auto t = Map< Matrix<unsigned char, Constants::imageSize, 1> >(data.dataBase.test_images[0].data(), Constants::imageSize);*/
-
-
-
-
-
-//	cout << endl << m;
 	cout << endl;
 	cout << endl << greyImage;
-	cout << endl;/*
-	cout << endl << m * greyImage;*/
+	cout << endl;
 
 	int i;
 	cin >> i;

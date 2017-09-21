@@ -2,6 +2,7 @@
 #include "LodePng.hpp"
 #include "mnist/mnist_reader_less.hpp"
 #include <assert.h>
+#include "stdafx.hpp"
 
 const std::string dir = "../content/";
 
@@ -12,7 +13,7 @@ const std::string& Data::getContentDir()
 {
 	return dir;
 }
-void Data::loadImage(std::string filename, ImageVector* greyImage, int* solution)
+void Data::loadImage(std::string filename, Eigen::VectorXf* greyImage, int* solution)
 {
 	std::vector<unsigned char> rgbaImage;
 	unsigned width, height;
@@ -45,17 +46,17 @@ bool Data::loadData()
 		return false;
 }
 
-void Data::getTrainImage(int index, ImageVector* greyImage, int* solution)
+void Data::getTrainImage(int index, Eigen::VectorXf* greyImage, int* solution)
 {
 	getStuff(index, greyImage, dataBase.training_images[index]);
 	*solution = dataBase.training_labels[index];
 }
-void Data::getTestImage(int index, ImageVector* greyImage, int* solution)
+void Data::getTestImage(int index, Eigen::VectorXf* greyImage, int* solution)
 {
 	getStuff(index, greyImage, dataBase.test_images[index]);
 	*solution = dataBase.test_labels[index];
 }
-void Data::getStuff(int index, ImageVector* greyImage, const std::vector<unsigned char>& image)
+void Data::getStuff(int index, Eigen::VectorXf* greyImage, const std::vector<unsigned char>& image)
 {
 	for(unsigned i = 0; i < image.size(); ++i)
 	{
