@@ -6,6 +6,8 @@
 class Data
 {
 public:
+
+	Data();
 	/// <summary>
 	/// Returns relative path to the content directory.
 	/// </summary>
@@ -13,7 +15,7 @@ public:
 	/// <summary>
 	/// Starts from content directory. Expects file without extension, Eigen vector appropriately sized.
 	/// </summary>
-	static void loadImage(std::string filename, Eigen::VectorXf* greyImage, int* solution);
+	static void loadImage(std::string filename, ImageType* greyImage, int* solution);
 
 
 	/// <summary>
@@ -21,13 +23,20 @@ public:
 	/// </summary>
 	bool loadData();
 
-	void getTrainImage(int index, Eigen::VectorXf* greyImage, int* solution);
+	void getTrainImage(int index, ImageType* greyImage, int* solution) const;
 
-	void getTestImage(int index, Eigen::VectorXf* greyImage, int* solution);
+	void getTestImage(int index, ImageType* greyImage, int* solution) const;
+
+	const DataType& getTestData() const;
+	const DataType& getTrainData() const;
 
 	mnist::MNIST_dataset<unsigned char, unsigned char> dataBase;
 private:
 
-	void getStuff(int index, Eigen::VectorXf* greyImage, const std::vector<unsigned char>& image);
+
+	mutable DataType* convertedTest;
+	mutable DataType* convertedTrain;
+
+	void getStuff(int index, ImageType* greyImage, const List<unsigned char>& image) const;
 };
 
