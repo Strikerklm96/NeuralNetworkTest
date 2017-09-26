@@ -42,7 +42,7 @@ public:
 	{
 		init(biases, weights);
 	}
-	void init(std::vector<VectorXf>& biases, std::vector<MatrixXf >& weights)
+	void init(std::vector<ActiveType>& biases, std::vector<ActiveType>& weights)
 	{
 
 		srand((unsigned int)time(0));
@@ -228,9 +228,9 @@ public:
 		//BP1
 		ActiveType lhs = costDerivative(activationPerLayer.end()[-1], answer);
 		ActiveType rhs = weightedInputPerLayer.end()[-1].unaryExpr(&sigmoidPrime);
-		ActiveType delta(layerSizes.end()[-1]);
+		ActiveType delta(layerSizes.end()[-1], 1);
 		for(int i = 0; i < layerSizes.end()[-1]; ++i)
-			delta[i] = lhs[i] * rhs[i];
+			delta(i) = lhs(i) * rhs(i); // TODO remove looping
 
 
 		//BP3
@@ -242,26 +242,18 @@ public:
 		for(unsigned layer = 2; layer < layerSizes.size(); ++layer)
 		{
 			auto& z = weightedInputPerLayer.end()[-layer];
-			auto& sp = z.unaryExpr(&sigmoid);
+			auto sigmoidPrime = z.unaryExpr(&sigmoid);
 
 			const MatrixXf& weight = weights.end()[-layer + 1];//10x30
 			MatrixXf& nambla_w = nambla_ws.end()[-layer + 1];
-			ActiveType deltaNew = ActiveType(layerSizes.end()[-layer]);
 
-			for(unsigned col = 0; col < nambla_w.cols(); ++col)
-				deltaNew[col] = weight.col(col).dot(delta);
-			delta = deltaNew;
+			//bp2
+			delta = (weight.transpose() * delta).cwiseProduct(sigmoidPrime);
 
 			nambla_bs.end()[-layer] = delta;
-
 			bp4(delta, activationPerLayer.end()[-layer - 1], &nambla_ws.end()[-layer]);//size 10
 		}
-
-
-		//TODO implement //BP2
 	}
-
-
 	/// <summary>
 	/// BP4. Should produce (d.size, a.size) matrix.
 	/// </summary>
@@ -277,7 +269,7 @@ public:
 		{
 			for(unsigned row = 0; row < delta.size(); ++row)
 			{
-				(*nambla_w_pos)(row, col) = activationLastLayer[col] * delta[row];
+				(*nambla_w_pos)(row, col) = activationLastLayer(col, 0) * delta(row, 0);
 			}
 		}
 	}

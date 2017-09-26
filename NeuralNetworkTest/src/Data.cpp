@@ -18,7 +18,7 @@ const std::string& Data::getContentDir()
 {
 	return dir;
 }
-void Data::loadImage(std::string filename, Eigen::VectorXf* greyImage, int* solution)
+void Data::loadImage(std::string filename, ActiveType* greyImage, int* solution)
 {
 	std::vector<unsigned char> rgbaImage;
 	unsigned width, height;
@@ -34,9 +34,10 @@ void Data::loadImage(std::string filename, Eigen::VectorXf* greyImage, int* solu
 	//image now in RGBA, RGBA etc.
 
 	//convert to greyscale
+	ActiveType& t = *greyImage;
 	for(unsigned int i = 0; i < rgbaImage.size(); i += 4)
 	{
-		(*greyImage)[i / 4] = ((rgbaImage[i] + rgbaImage[i + 1] + rgbaImage[i + 2]) / 3.f) / 255.f;
+		t(i/4,0) = ((rgbaImage[i] + rgbaImage[i + 1] + rgbaImage[i + 2]) / 3.f) / 255.f;
 	}
 }
 
@@ -65,7 +66,7 @@ void Data::getStuff(int index, ActiveType* greyImage, const std::vector<unsigned
 {
 	for(unsigned i = 0; i < image.size(); ++i)
 	{
-		(*greyImage)[i] = image[i] / 255.f;
+		(*greyImage)(i,0) = image[i] / 255.f;
 	}
 }
 const DataType& Data::getTestData() const
@@ -77,7 +78,7 @@ const DataType& Data::getTestData() const
 		const int numTestImages = dataBase.test_images.size();
 		for(int i = 0; i < numTestImages; ++i)
 		{
-			ActiveType image(Constants::imageSize);
+			ActiveType image(Constants::imageSize,1);
 			AnswerType answer;
 
 			getTestImage(i, &image, &answer);
@@ -97,7 +98,7 @@ const DataType& Data::getTrainData() const
 		const int numTrainImages = dataBase.training_images.size();
 		for(int i = 0; i < numTrainImages; ++i)
 		{
-			ActiveType image(Constants::imageSize);
+			ActiveType image(Constants::imageSize, 1);
 			AnswerType answer;
 
 			getTrainImage(i, &image, &answer);
