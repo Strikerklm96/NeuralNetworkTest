@@ -222,21 +222,17 @@ public:
 		{
 			ActiveType initActivation = inputImage;
 			feedForward(&initActivation, biases, weights, &activationPerLayer, &weightedInputPerLayer);
-			//cout << "\n" << activationPerLayer.end()[-1][0];
 		}
 
 		//BP1
 		ActiveType lhs = costDerivative(activationPerLayer.end()[-1], answer);
 		ActiveType rhs = weightedInputPerLayer.end()[-1].unaryExpr(&sigmoidPrime);
 		ActiveType delta(layerSizes.end()[-1], 1);
-		for(int i = 0; i < layerSizes.end()[-1]; ++i)
-			delta(i) = lhs(i) * rhs(i); // TODO remove looping
-
+		delta = lhs.cwiseProduct(rhs);
 
 		//BP3
 		nambla_bs.end()[-1] = delta;
-
-
+		//BP4
 		bp4(delta, activationPerLayer.end()[-2], &nambla_ws.end()[-1]);//size 10
 
 		for(unsigned layer = 2; layer < layerSizes.size(); ++layer)
@@ -247,10 +243,11 @@ public:
 			const MatrixXf& weight = weights.end()[-layer + 1];//10x30
 			MatrixXf& nambla_w = nambla_ws.end()[-layer + 1];
 
-			//bp2
+			//BP2
 			delta = (weight.transpose() * delta).cwiseProduct(sigmoidPrime);
 
 			nambla_bs.end()[-layer] = delta;
+			//BP4
 			bp4(delta, activationPerLayer.end()[-layer - 1], &nambla_ws.end()[-layer]);//size 10
 		}
 	}
@@ -262,6 +259,7 @@ public:
 	/// <param name="nambla_w_pos">Computed delta nambla weights for a layer.</param>
 	void bp4(const ActiveType& delta, const ActiveType& activationLastLayer, MatrixXf* nambla_w_pos)
 	{
+		(*nambla_w_pos) = delta * activationLastLayer.transpose();
 	}
 
 	void initNambla(BiasType* nambla_b, WeightType* nambla_w)
