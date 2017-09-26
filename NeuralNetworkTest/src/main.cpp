@@ -127,6 +127,8 @@ public:
 			allBatches.resize(numBatches);
 			for(unsigned batch = 0; batch < numBatches; ++batch)
 			{
+				//TODO, randomize image order to improve learning
+
 				allBatches[batch].resize(samplesPerBatch);
 				for(unsigned sampleIndex = 0; sampleIndex < samplesPerBatch; ++sampleIndex)
 				{
