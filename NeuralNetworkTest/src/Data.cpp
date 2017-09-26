@@ -51,17 +51,17 @@ bool Data::loadData()
 		return false;
 }
 
-void Data::getTrainImage(int index, ImageType* greyImage, int* solution) const
+void Data::getTrainImage(int index, ActiveType* greyImage, int* solution) const
 {
 	getStuff(index, greyImage, dataBase.training_images[index]);
 	*solution = dataBase.training_labels[index];
 }
-void Data::getTestImage(int index, ImageType* greyImage, int* solution) const
+void Data::getTestImage(int index, ActiveType* greyImage, int* solution) const
 {
 	getStuff(index, greyImage, dataBase.test_images[index]);
 	*solution = dataBase.test_labels[index];
 }
-void Data::getStuff(int index, ImageType* greyImage, const std::vector<unsigned char>& image) const
+void Data::getStuff(int index, ActiveType* greyImage, const std::vector<unsigned char>& image) const
 {
 	for(unsigned i = 0; i < image.size(); ++i)
 	{
@@ -77,12 +77,12 @@ const DataType& Data::getTestData() const
 		const int numTestImages = dataBase.test_images.size();
 		for(int i = 0; i < numTestImages; ++i)
 		{
-			ImageType image(Constants::imageSize);
+			ActiveType image(Constants::imageSize);
 			AnswerType answer;
 
 			getTestImage(i, &image, &answer);
 
-			(*convertedTest).push_back(Pair<ImageType, AnswerType>(image, answer));
+			(*convertedTest).push_back(Pair<ActiveType, AnswerType>(image, answer));
 		}
 	}
 
@@ -97,12 +97,12 @@ const DataType& Data::getTrainData() const
 		const int numTrainImages = dataBase.training_images.size();
 		for(int i = 0; i < numTrainImages; ++i)
 		{
-			ImageType image(Constants::imageSize);
+			ActiveType image(Constants::imageSize);
 			AnswerType answer;
 
 			getTrainImage(i, &image, &answer);
 
-			(*convertedTrain).push_back(Pair<ImageType, AnswerType>(image, answer));
+			(*convertedTrain).push_back(Pair<ActiveType, AnswerType>(image, answer));
 		}
 	}
 

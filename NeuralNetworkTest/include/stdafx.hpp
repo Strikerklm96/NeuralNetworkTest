@@ -33,6 +33,11 @@ using Pair = std::pair < T, R > ;
 
 typedef float PixelType;
 typedef int AnswerType;
-typedef Eigen::VectorXf ImageType;
-typedef List<Pair<ImageType, AnswerType> > DataType;
+typedef Eigen::VectorXf ActiveType;
+
+typedef List<Pair<ActiveType, AnswerType> > DataType;
+
+
+typedef List<ActiveType> BiasType;
+typedef List<Eigen::MatrixXf> WeightType;
 
