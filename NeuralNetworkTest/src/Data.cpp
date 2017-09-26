@@ -37,7 +37,7 @@ void Data::loadImage(std::string filename, ActiveType* greyImage, int* solution)
 	ActiveType& t = *greyImage;
 	for(unsigned int i = 0; i < rgbaImage.size(); i += 4)
 	{
-		t(i/4,0) = ((rgbaImage[i] + rgbaImage[i + 1] + rgbaImage[i + 2]) / 3.f) / 255.f;
+		t(i/4,0) = 1 - (((rgbaImage[i] + rgbaImage[i + 1] + rgbaImage[i + 2]) / 3.f) / 255.f);
 	}
 }
 

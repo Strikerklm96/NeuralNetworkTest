@@ -2,6 +2,7 @@
 #include "Constants.hpp"
 #include "Data.hpp"
 
+#include <random>
 
 
 using namespace std;
@@ -14,10 +15,27 @@ float sigmoid(float z)
 {
 	return(1.f / (1.0f + std::powf(e, -z)));
 }
-
 float sigmoidPrime(float z)
 {
 	return sigmoid(z) * (1 - sigmoid(z));
+}
+
+
+float crossEntropy(float z)
+{
+	return 1.f;//still to do
+}
+float crossEntropyPrime(float z)
+{
+	return(crossEntropy(z) *(1 - crossEntropy(z)));
+}
+float randy(float dummy)
+{
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::normal_distribution<float> d(0, 1);
+	float rand = d(gen);
+	return rand;
 }
 
 class Network
@@ -45,6 +63,7 @@ public:
 	void init(std::vector<ActiveType>& biases, std::vector<ActiveType>& weights)
 	{
 
+
 		srand((unsigned int)time(0));
 
 		layerSizes.push_back(inputLayerSize);
@@ -61,9 +80,12 @@ public:
 		unsigned start = 1;//first layer is input layer, so it doesnt modify its output (the output is the value of the pixels)
 		for(unsigned i = start; i < numLayers; ++i)//for each neuron in the network
 		{
-			auto biasLayer = VectorXf(layerSizes[i]);//give it a bias
-			biasLayer.setRandom();
+
+			VectorXf biasLayer = VectorXf(layerSizes[i]);//give it a bias
+			//biasLayer.setRandom();
+			biasLayer = biasLayer.unaryExpr(&randy);
 			biases.push_back(biasLayer);
+
 		}
 
 		weights.resize(numLayers - 1);
@@ -76,7 +98,8 @@ public:
 			//b = Vec(2)
 			//c = a * b
 			weights[layer] = MatrixXf(nextLayerSize, layerSize);
-			weights[layer].setRandom();
+			//weights[layer].setRandom();
+			weights[layer] = weights[layer].unaryExpr(&randy);
 		}
 	}
 
@@ -344,18 +367,20 @@ int main(int argc, char* argv[])
 
 	network.train(data.getTrainData(), 30, 10, 3.f, &data.getTestData());
 
+	int sol = 6;
+	int i = 0;
+	while(true)
+	{
+		ActiveType image(Constants::imageSize, 1);
+		data.loadImage("image" + std::to_string(i), &image, &sol);
+		network.feedForward(&image, network.biases, network.weights, nullptr, nullptr);
+		AnswerType guess;
+		image.col(0).maxCoeff(&guess);
+		cout << "\n\n===========================\nGuess was " << guess << "\nWith Values\n" << image << "\n\n Pick Next Image:";
+		cin >> i;
+	}
 
 
-	//data.getTrainImage(45, &greyImage, &sln);
-
-	//n.feedForward(&greyImage, n.biases, n.weights);
-
-
-	//cout << endl;
-	//cout << endl << greyImage;
-	//cout << endl;
-
-	int i;
 	cin >> i;
 	return 0;
 }
