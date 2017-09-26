@@ -25,7 +25,7 @@ class Network
 public:
 
 	const int inputLayerSize = 1;// Constants::imageSize;
-	const int hiddenLayerSize = 1;// 30;
+	const int hiddenLayerSize = 5;// 30;
 	const int numOutputs = 2;// 10;
 	std::vector<int> layerSizes;
 
