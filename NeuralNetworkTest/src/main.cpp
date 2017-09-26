@@ -262,16 +262,6 @@ public:
 	/// <param name="nambla_w_pos">Computed delta nambla weights for a layer.</param>
 	void bp4(const ActiveType& delta, const ActiveType& activationLastLayer, MatrixXf* nambla_w_pos)
 	{
-		//TODO you can make this a lot faster using the multiplication code, but you have to uses MatrixXf, not Vectors!
-
-		//BP4, check notes for example numpy code
-		for(unsigned col = 0; col < activationLastLayer.size(); ++col)
-		{
-			for(unsigned row = 0; row < delta.size(); ++row)
-			{
-				(*nambla_w_pos)(row, col) = activationLastLayer(col, 0) * delta(row, 0);
-			}
-		}
 	}
 
 	void initNambla(BiasType* nambla_b, WeightType* nambla_w)
