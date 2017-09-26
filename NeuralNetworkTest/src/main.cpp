@@ -24,9 +24,9 @@ class Network
 {
 public:
 
-	const int inputLayerSize = 1;// Constants::imageSize;
-	const int hiddenLayerSize = 5;// 30;
-	const int numOutputs = 2;// 10;
+	const int inputLayerSize = Constants::imageSize;
+	const int hiddenLayerSize = 30;
+	const int numOutputs = 10;
 	std::vector<int> layerSizes;
 
 	BiasType biases;//biases modify output value for all connections
@@ -83,23 +83,28 @@ public:
 
 	void feedForward(ActiveType* activation, const BiasType& biases, const WeightType& weights, List<ActiveType>* recordActivations, List<ActiveType>* recordZ)
 	{
-		if(recordActivations)
-			recordActivations->push_back(*activation);
 
-		for(unsigned int i = 0; i < biases.size(); ++i)
+		if(recordActivations)
 		{
-			auto bias = biases[i];
-			auto weight = weights[i];
+			recordActivations->resize(layerSizes.size());
+			recordZ->resize(layerSizes.size() - 1);
+			(*recordActivations)[0] = (*activation);
+		}
+
+		for(unsigned int layer = 0; layer < biases.size(); ++layer)
+		{
+			auto bias = biases[layer];
+			auto weight = weights[layer];
 
 			(*activation) = weight * (*activation) + bias;// z (weighted input)
 
 			if(recordZ)
-				recordZ->push_back(*activation);
+				(*recordZ)[layer] = (*activation);
 
 			(*activation) = (*activation).unaryExpr(&sigmoid);// activation
 
 			if(recordActivations)
-				recordActivations->push_back(*activation);
+				(*recordActivations)[layer + 1] = (*activation);
 		}
 	}
 	/// <summary>
@@ -119,14 +124,15 @@ public:
 		{
 			//group data into batches
 			List<DataType> allBatches;
+			allBatches.resize(numBatches);
 			for(unsigned batch = 0; batch < numBatches; ++batch)
 			{
-				allBatches.push_back(DataType());
+				allBatches[batch].resize(samplesPerBatch);
 				for(unsigned sampleIndex = 0; sampleIndex < samplesPerBatch; ++sampleIndex)
 				{
 					int batchOffset = batch * samplesPerBatch;//skip past the samples that we have already done.
 					auto& sample = allData[batchOffset + sampleIndex];
-					allBatches[batch].push_back(sample);
+					allBatches[batch][sampleIndex] = sample;
 				}
 			}
 
@@ -159,13 +165,15 @@ public:
 		//set namblas to zero
 		BiasType nambla_b = biases;
 		WeightType nambla_w = weights;
+
 		initNambla(&nambla_b, &nambla_w);
+
+		BiasType deltaBiases = nambla_b;
+		WeightType deltaWeights = nambla_w;
 
 		//for each sample in minibatch, compute deltas
 		for(unsigned sample = 0; sample < batch.size(); ++sample)
 		{
-			BiasType deltaBiases = nambla_b;
-			WeightType deltaWeights = nambla_w;
 			backprop(batch[sample].first, batch[sample].second, &deltaBiases, &deltaWeights);
 
 
@@ -181,8 +189,8 @@ public:
 		//update weights and biases
 		for(unsigned layer = 0; layer < nambla_b.size(); ++layer)
 		{
-		//	if(layer == 0)
-		//		cout << "\n\n\n\n" << biases[layer][0];
+			//	if(layer == 0)
+			//		cout << "\n\n\n\n" << biases[layer][0];
 			biases[layer] -= learnRateModifier * nambla_b[layer];
 			//cout << "\n\n\n\n" << learnRateModifier * nambla_b[layer];
 		}
@@ -212,7 +220,7 @@ public:
 		{
 			ActiveType initActivation = inputImage;
 			feedForward(&initActivation, biases, weights, &activationPerLayer, &weightedInputPerLayer);
-			cout << "\n" << activationPerLayer.end()[-1][0];
+			//cout << "\n" << activationPerLayer.end()[-1][0];
 		}
 
 		//BP1
@@ -244,7 +252,7 @@ public:
 
 			nambla_bs.end()[-layer] = delta;
 
-			bp4(delta, activationPerLayer.end()[-layer-1], &nambla_ws.end()[-layer]);//size 10
+			bp4(delta, activationPerLayer.end()[-layer - 1], &nambla_ws.end()[-layer]);//size 10
 		}
 
 
@@ -260,13 +268,14 @@ public:
 	/// <param name="nambla_w_pos">Computed delta nambla weights for a layer.</param>
 	void bp4(const ActiveType& delta, const ActiveType& activationLastLayer, MatrixXf* nambla_w_pos)
 	{
+		//TODO you can make this a lot faster using the multiplication code, but you have to uses MatrixXf, not Vectors!
+
 		//BP4, check notes for example numpy code
-		MatrixXf& back = *nambla_w_pos;
 		for(unsigned col = 0; col < activationLastLayer.size(); ++col)
 		{
 			for(unsigned row = 0; row < delta.size(); ++row)
 			{
-				back(row, col) = activationLastLayer[col] * delta[row];
+				(*nambla_w_pos)(row, col) = activationLastLayer[col] * delta[row];
 			}
 		}
 	}
@@ -293,11 +302,16 @@ public:
 		int correctGuesses = 0;
 		for(unsigned i = 0; i < guesses.size(); ++i)
 		{
-			AnswerType guess = static_cast<int>(guesses[i].col(0).maxCoeff());
+			AnswerType guess;
+			guesses[i].col(0).maxCoeff(&guess);//get the index of the highest value
 
 			if(guess == answers[i].second)
 			{
 				++correctGuesses;
+			}
+			else
+			{
+				//TODO: save bad guesses and look at what they looked like
 			}
 		}
 
@@ -312,27 +326,42 @@ public:
 
 int main(int argc, char* argv[])
 {
+	////Example bp4 fix
+	//MatrixXf a(3,1);
+	//a(0, 0) = 1;
+	//a(1, 0) = 1;
+	//a(2, 0) = 1;
+	//MatrixXf b(2, 1);
+	//b(0, 0) = 2;
+	//b(1, 0) = 3;
+	//MatrixXf asdf = a.transpose();
+
+	//MatrixXf t = b * asdf;
+
+
+
 	Network network;
 	Data data;
 
-	DataType d;
-	Eigen::VectorXf a = ActiveType(1);
-	Eigen::VectorXf b = ActiveType(1);
-	a[0] = 0;
-	b[0] = 1;
+	//DataType d;
+	//Eigen::VectorXf a = ActiveType(1);
+	//Eigen::VectorXf b = ActiveType(1);
+	//a[0] = 0;
+	//b[0] = 1;
 
-	for(int i = 0; i < 400; ++i)
-	{
-		d.push_back(Pair<ActiveType, AnswerType>(a, 0));
-		d.push_back(Pair<ActiveType, AnswerType>(b, 1));
-	}
-	
+	//for(int i = 0; i < 400; ++i)
+	//{
+	//	d.push_back(Pair<ActiveType, AnswerType>(a, 0));
+	//	d.push_back(Pair<ActiveType, AnswerType>(b, 1));
+	//}
+	//network.train(d, 30, 10, 3.f, &d);
 
-	//if(data.loadData() == false)
-	//	return 1;
 
-	//network.train(data.getTrainData(), 30, 10, 3.f, &data.getTestData());
-	network.train(d, 30, 10, 3.f, &d);
+	if(data.loadData() == false)
+		return 1;
+
+	network.train(data.getTrainData(), 30, 10, 3.f, &data.getTestData());
+
 
 
 	//data.getTrainImage(45, &greyImage, &sln);
