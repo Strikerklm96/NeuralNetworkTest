@@ -26,7 +26,7 @@ int main(int argc, char* argv[])
 
 	fipImage image;
 	image.load("../content/image1.png");
-	image.rotate(20);
+	image.rotate(-90);
 
 	image.save("../content/testImage.png");
 
