@@ -6,6 +6,7 @@ class Constants
 {
 public:
 	const static int imageSize = 28 * 28;
+	const static float e;
 
 	static Eigen::VectorXf ImageVector()
 	{
