@@ -26,7 +26,12 @@ int main(int argc, char* argv[])
 
 	fipImage image;
 	image.load("../content/image1.png");
-	image.rotate(-90);
+	RGBQUAD r;
+	r.rgbBlue = 0;
+	r.rgbGreen = 0;
+	r.rgbRed = 0;
+	r.rgbReserved = 255;
+	auto p = image.setPixelColor(0, 0, &r);
 
 	image.save("../content/testImage.png");
 

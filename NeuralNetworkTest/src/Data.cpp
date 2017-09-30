@@ -52,17 +52,17 @@ bool Data::loadData()
 		return false;
 }
 
-void Data::getTrainImage(int index, ActiveType* greyImage, int* solution) const
+void Data::getTrainImage(int index, ActiveType* greyImage, int* solution, float rot) const
 {
-	getStuff(index, greyImage, dataBase.training_images[index]);
+	getStuff(index, greyImage, dataBase.training_images[index], rot);
 	*solution = dataBase.training_labels[index];
 }
-void Data::getTestImage(int index, ActiveType* greyImage, int* solution) const
+void Data::getTestImage(int index, ActiveType* greyImage, int* solution, float rot) const
 {
-	getStuff(index, greyImage, dataBase.test_images[index]);
+	getStuff(index, greyImage, dataBase.test_images[index], rot);
 	*solution = dataBase.test_labels[index];
 }
-void Data::getStuff(int index, ActiveType* greyImage, const std::vector<unsigned char>& image) const
+void Data::getStuff(int index, ActiveType* greyImage, const std::vector<unsigned char>& image, float rot) const
 {
 	for(unsigned i = 0; i < image.size(); ++i)
 	{
@@ -80,8 +80,8 @@ DataType& Data::getTestData()
 		{
 			ActiveType image(Constants::imageSize,1);
 			AnswerType answer;
-
-			getTestImage(i, &image, &answer);
+			float rot = 0;
+			getTestImage(i, &image, &answer, rot);
 
 			(*convertedTest).push_back(Pair<ActiveType, AnswerType>(image, answer));
 		}
@@ -100,8 +100,8 @@ DataType& Data::getTrainData()
 		{
 			ActiveType image(Constants::imageSize, 1);
 			AnswerType answer;
-
-			getTrainImage(i, &image, &answer);
+			float rot = 0;
+			getTrainImage(i, &image, &answer, rot);
 
 			(*convertedTrain).push_back(Pair<ActiveType, AnswerType>(image, answer));
 		}

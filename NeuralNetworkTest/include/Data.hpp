@@ -23,9 +23,9 @@ public:
 	/// </summary>
 	bool loadData();
 
-	void getTrainImage(int index, ActiveType* greyImage, int* solution) const;
+	void getTrainImage(int index, ActiveType* greyImage, int* solution, float rot) const;
 
-	void getTestImage(int index, ActiveType* greyImage, int* solution) const;
+	void getTestImage(int index, ActiveType* greyImage, int* solution, float rot) const;
 
 	DataType& getTestData();
 	DataType& getTrainData();
@@ -37,6 +37,6 @@ private:
 	mutable DataType* convertedTest;
 	mutable DataType* convertedTrain;
 
-	void getStuff(int index, ActiveType* greyImage, const List<unsigned char>& image) const;
+	void getStuff(int index, ActiveType* greyImage, const List<unsigned char>& image, float rot) const;
 };
 
