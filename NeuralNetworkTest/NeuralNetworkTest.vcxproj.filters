@@ -59,5 +59,8 @@
     <ClInclude Include="include\Data.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="include\FreeImage.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

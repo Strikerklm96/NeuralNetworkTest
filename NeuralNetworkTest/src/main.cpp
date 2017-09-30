@@ -2,11 +2,17 @@
 #include "Constants.hpp"
 #include "Data.hpp"
 #include "Network.hpp"
+#include <Windows.h>
 
-
+#include "FreeImage.h"
+#include "FreeImagePlus.h"
 
 using namespace std;
 using namespace Eigen;
+
+#define WIDTH 800
+#define HEIGHT 600
+#define BPP 24 
 
 volatile int stop;
 void cinListen()
@@ -18,10 +24,15 @@ void cinListen()
 int main(int argc, char* argv[])
 {
 
+	fipImage image;
+	image.load("../content/image1.png");
+	image.rotate(20);
+
+	image.save("../content/testImage.png");
+
 	ActiveType t(4, 1);
 	t.setZero();
 	t(1, 0) = 1;
-
 
 
 	std::thread stopThread(cinListen);
