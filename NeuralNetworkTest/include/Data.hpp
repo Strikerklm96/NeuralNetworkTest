@@ -27,8 +27,8 @@ public:
 
 	void getTestImage(int index, ActiveType* greyImage, int* solution) const;
 
-	const DataType& getTestData() const;
-	const DataType& getTrainData() const;
+	DataType& getTestData();
+	DataType& getTrainData();
 
 	mnist::MNIST_dataset<unsigned char, unsigned char> dataBase;
 private:

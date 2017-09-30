@@ -191,6 +191,28 @@ void Network::updateMiniBatch(const DataType& batch, float learningRate)
 	}
 
 }
+ActiveType Network::preprocess(const ActiveType& inputImage)
+{
+	return inputImage;
+	int size = 28;
+	ActiveType processed(size,1);
+
+	//put into left side
+	for(int row = 0; row < size; ++row)
+	{
+		int firstCol = 0;
+		for(int col = 0; col < size; ++col)
+		{
+			if(inputImage(row * 28 + col) != 0)
+			{
+				firstCol = col;//first col with data
+				break;
+			}
+		}
+		processed(row) = firstCol;
+	}
+	return processed;
+}
 void Network::backprop(const ActiveType& inputImage, const AnswerType answer, BiasType* nambla_b_ptr, WeightType* nambla_w_ptr)
 {
 	BiasType& nambla_bs = *nambla_b_ptr;
@@ -202,7 +224,7 @@ void Network::backprop(const ActiveType& inputImage, const AnswerType answer, Bi
 
 	//store all activations layer by layer (feed forward)
 	{
-		ActiveType initActivation = inputImage;
+		ActiveType initActivation = preprocess(inputImage);
 		feedForward(&initActivation, biases, weights, &activationPerLayer, &weightedInputPerLayer);
 	}
 
@@ -210,7 +232,7 @@ void Network::backprop(const ActiveType& inputImage, const AnswerType answer, Bi
 	ActiveType lhs = costDerivative(activationPerLayer.end()[-1], answer);
 	ActiveType rhs = weightedInputPerLayer.end()[-1].unaryExpr(&sigmoidPrime);
 	ActiveType delta(layerSizes.end()[-1], 1);
-	delta = lhs.cwiseProduct(rhs);
+	delta = lhs;// .cwiseProduct(rhs);
 
 	//BP3
 	nambla_bs.end()[-1] = delta;

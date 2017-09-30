@@ -32,6 +32,7 @@ public:
 
 
 private:
+	ActiveType preprocess(const ActiveType& inputImage);
 	MatrixXf answerMatrix;
 	void updateMiniBatch(const DataType& batch, float learningRate);
 	void backprop(const ActiveType& inputImage, const AnswerType answer, BiasType* nambla_b_ptr, WeightType* nambla_w_ptr);

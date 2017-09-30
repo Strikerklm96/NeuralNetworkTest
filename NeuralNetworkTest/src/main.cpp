@@ -3,6 +3,8 @@
 #include "Data.hpp"
 #include "Network.hpp"
 
+
+
 using namespace std;
 using namespace Eigen;
 
@@ -15,6 +17,12 @@ void cinListen()
 }
 int main(int argc, char* argv[])
 {
+
+	ActiveType t(4, 1);
+	t.setZero();
+	t(1, 0) = 1;
+
+
 
 	std::thread stopThread(cinListen);
 
@@ -55,7 +63,9 @@ int main(int argc, char* argv[])
 	stop = 0;
 	while(!stop)
 	{
-		network.train(data.getTrainData(), 1, 10, 3.f, &data.getTestData());
+		auto& datas = data.getTrainData();
+		std::random_shuffle(datas.begin(), datas.end());
+		network.train(datas, 1, 10, 0.5f, &data.getTestData());
 	}
 
 	int sol = 6;

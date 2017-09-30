@@ -69,7 +69,7 @@ void Data::getStuff(int index, ActiveType* greyImage, const std::vector<unsigned
 		(*greyImage)(i,0) = image[i] / 255.f;
 	}
 }
-const DataType& Data::getTestData() const
+DataType& Data::getTestData()
 {
 	if(convertedTest == nullptr)
 	{
@@ -89,7 +89,7 @@ const DataType& Data::getTestData() const
 
 	return *convertedTest;
 }
-const DataType& Data::getTrainData() const
+DataType& Data::getTrainData()
 {
 	if(convertedTrain == nullptr)
 	{
